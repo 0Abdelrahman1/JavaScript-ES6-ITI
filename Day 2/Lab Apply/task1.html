@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function createCourse(obj)
+        {
+            var defaultObj = {courseName:"ES6" , courseDuration:"3days", courseOwner:"JavaScript"};
+            obj = {...defaultObj, ...obj};
+            for (var elem in obj)
+                if (!defaultObj[elem])
+                    throw Exception(`You Passed Obj With Wrong Feild: ${elem}`);
+            return obj;
+        }
+
+        //test
+        console.log(createCourse({}))
+        console.log(createCourse({courseName:'_'}))
+        console.log(createCourse({courseDuration:'_'}))
+        console.log(createCourse({courseOwner:'_'}))
+        console.log(createCourse({courseName:'_', courseDuration:'_'}))
+        console.log(createCourse({courseOwner:'_', courseDuration:'_'}))
+        console.log(createCourse({courseName:'_', courseOwner:'_'}))
+        console.log(createCourse({courseName:'_', courseOwner:'_', courseDuration:'_'}))
+        // console.log(createCourse({courseName:'_', courseOwner:'_', courseDuration:'_', newField:'error'}))
+        // console.log(createCourse({courseName:'_', courseOwner:'_', newField:'error'}))
+        // console.log(createCourse({courseName:'_', newField:'error'}))
+        // console.log(createCourse({newField:'error'}))
+    </script>
+</body>
+</html>

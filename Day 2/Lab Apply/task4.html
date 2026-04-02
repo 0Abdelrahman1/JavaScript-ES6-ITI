@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var obj1 = {
+            p1:'_1',
+            p2:'_2',
+            p3:'_3',
+            p4:'_4',
+            [Symbol.iterator]: function*()
+            {
+                for (var elem in this)
+                    yield elem;
+            }
+        }
+        var obj2 = {
+            p1:'_1',
+            p2:'_2',
+            p3:'_3',
+            p4:'_4',
+            [Symbol.iterator]: function*()
+            {
+                for (var elem in this)
+                    yield {key: elem, value: this[elem]};
+            }
+        }
+
+        for (var elem of obj1)
+            console.log(elem);
+
+        for (var elem of obj2)
+            console.log(elem);
+
+        var iter = obj2[Symbol.iterator]();
+
+        var cur = iter.next();
+        while (!(cur.done))
+        {
+            console.log(cur);
+            cur = iter.next();
+        }
+
+    </script>
+</body>
+</html>

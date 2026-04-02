@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function* fibCnt(cnt)
+        {
+            var x = 0, y = 1;
+            while(cnt--)
+            {
+                yield x;
+                [x, y] = [y, x + y];
+            }
+        }
+        function* fibMax(max)
+        {
+            var x = 0, y = 1;
+            while(x <= max)
+            {
+                yield x;
+                [x, y] = [y, x + y];
+            }
+        }
+        
+        console.log("fibCnt:")
+        for (var x of fibCnt(20))
+            console.log(x);
+        
+
+        console.log("fibMax:")
+        var iter = fibMax(20);
+
+        var {value:x, done:y} = iter.next();
+        while (!y)
+        {
+            console.log(x);
+            ({value:x, done:y} = iter.next());  
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var arr = [10,2,3,4,5];
+        function min_max(...arr)
+        {
+            return {min:Math.min(...arr), max:Math.max(...arr)};
+        }
+        var mn, mx;
+        ({min:mn, max:mx} = min_max(...arr));
+        console.log(mn, mx);
+    </script>
+</body>
+</html>

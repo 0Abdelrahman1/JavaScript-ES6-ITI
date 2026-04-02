@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var fruits = ["apple", "strawberry", "banana", "orange", "mango"];
+        console.log(fruits.every(s => typeof(s) == 'string'));
+        console.log(fruits.some(s => s.startsWith('a')));
+        console.log(fruits.filter(s => s.startsWith('s') || s.startsWith('b')));
+        console.log(fruits.map(s => `I like ${s}`));
+        var n = fruits.map(s => `I like ${s}`);
+        n.forEach(s => console.log(s))
+
+
+    </script>
+</body>
+</html>
