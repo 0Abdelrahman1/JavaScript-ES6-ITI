@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            border-color: black;
+            border-width: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="myCanvas"  width="500" height="500"></canvas>
+
+    <script>
+
+
+        class Point
+        {
+            constructor(x=0, y=0)
+            {
+                this.x = x;
+                this.y = y;
+            }
+            [Symbol.iterator]()
+            {
+                return [this.x, this.y][Symbol.iterator]();
+            }
+        }
+
+        class Polygon
+        {
+            constructor(points=[])
+            {
+                if (this.constructor==Polygon) throw "can't instantiate object from abstract class";
+                this.points = points
+            }
+            area() { throw 'pure abstract area function' }
+            perimeter() { throw 'pure abstract perimeter function' }
+            draw(context) { throw 'pure abstract draw function'}
+            toString()
+            {
+                return `${this.constructor.name}: {Perimeter: ${this.perimeter()}, Area: ${this.area()}}`
+            }
+        }
+
+        class Rectangle extends Polygon
+        {
+            constructor(start, width, height)
+            {
+                super([start])
+                this.width = width
+                this.height = height
+            }
+            get Start(){ return this.points[0] }
+            set Start(value){ this.points[0] = value; }
+            area()
+            {
+                return this.width * this.height;
+            }
+            perimeter()
+            {
+                return 2 * (this.width + this.height);
+            }
+            draw(context)
+            {
+                context.beginPath();
+                context.rect(...this.Start, this.width, this.height);
+                context.fill();
+                context.stroke();
+            }
+        }
+
+        class Square extends Rectangle
+        {
+            constructor(start, length)
+            {
+                super(start, length, length);
+            }
+        }
+
+        class Circle extends Polygon
+        {
+            constructor(center, radius)
+            {
+                super([center])
+                this.radius = radius;
+            }
+            get Center() { return this.points[0]; }
+            set Center(value) { this.points[0] = value; }
+            area()
+            {
+                return Math.PI * this.radius ** 2;
+            }
+            perimeter()
+            {
+                return 2 * Math.PI * this.radius;
+            }
+            draw(context)
+            {
+                context.beginPath()
+                context.arc(...this.Center, this.radius, 0, 2 * Math.PI);
+                context.fill();
+                context.stroke();
+            }
+        }
+
+        class Triangle extends Polygon
+        {
+            constructor(P1, P2, P3)
+            {
+                super([P1, P2, P3]);
+            }
+            get P1() {return this.points[0];}
+            set P1(value) {this.points[0] = value; }
+            get P2() {return this.points[1];}
+            set P2(value) {this.points[1] = value; }
+            get P3() {return this.points[2];}
+            set P3(value) {this.points[2] = value; }
+            area()
+            {
+                const {x: x1, y: y1} = this.P1;
+                const {x: x2, y: y2} = this.P2;
+                const {x: x3, y: y3} = this.P3;
+                return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2);
+            }
+            perimeter()
+            {
+                const d1 = Math.sqrt((this.P2.x - this.P1.x) ** 2 + (this.P2.y - this.P1.y) ** 2);
+                const d2 = Math.sqrt((this.P3.x - this.P2.x) ** 2 + (this.P3.y - this.P2.y) ** 2);
+                const d3 = Math.sqrt((this.P1.x - this.P3.x) ** 2 + (this.P1.y - this.P3.y) ** 2);
+                return d1 + d2 + d3;
+            }
+            draw(context)
+            {
+                context.beginPath()
+                context.moveTo(...this.P1)
+                context.lineTo(...this.P2)
+                context.lineTo(...this.P3)
+                context.closePath();
+                context.fill();
+                context.stroke();
+            }
+        }
+
+        var context = document.getElementById("myCanvas").getContext('2d');
+        context.width = 2;
+        context.fillStyle = 'blue'
+        context.strokeStyle = 'red'
+        
+        var rec = new Rectangle(new Point(100, 100), 30, 20);
+        console.log(rec.toString())
+        rec.draw(context);
+        
+        var sq = new Square(new Point(200, 200), 30, 30);
+        console.log(sq.toString())
+        sq.draw(context);
+        
+        var cir = new Circle(new Point(300, 300), 20);
+        console.log(cir.toString())
+        cir.draw(context);
+
+        var tri = new Triangle(new Point(400, 400), new Point(450, 400), new Point(420, 430));
+        console.log(tri.toString())
+        tri.draw(context);
+
+
+        
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // target: The target object.
+        // prop: The name of the property.
+
+        // [1] Reflect.has(target, prop): it is semantically equivalent to: ```propertyKey in target;```
+        //                                so it checks if a property is in an object
+
+        // [2] Reflect.ownKeys(target): static method returns an array of the target object's own property keys.
+        //                              It is the only way to get all own properties – enumerable and not enumerable, strings and symbols — in one call
+
+        // [3] Reflect.isExtensible(target): it is like Object.isExtensible(target) but the difference is
+        //                                   if target is not object it throws error instead of returnning false as Object.isExtensible()
+        //                                   it checks wheather I can add more properties to this object or not
+
+        // [4] Reflect.preventExtensions(target): It prevents new (future) properties from ever being added to an object
+        //                                        returns a Boolean indicating whether or not the target was successfully set to prevent extensions
+        
+        // [5] Reflect.setPrototypeOf(target, proto): It sets the prototype of a specified object (target).
+        //                                            returns a Boolean indicating whether or not the prototype was successfully set.
+        
+        // [6] Reflect.getPrototypeOf(target): It returns the prototype of the specified object. (which may be an object or null)
+        
+        // [7] Reflect.defineProperty(target, prop, attr): it is nearly like Object.defineProperty() 
+        //                                                 (difference: it throws a TypeError if the status is false while Reflect returns false)
+        //                                                  returns a Boolean indicating whether or not the property was successfully defined.
+
+        // [8] Reflect.deleteProperty(target, prop): It deletes a property from an object.
+        //                                           returns a Boolean indicating whether or not the property was successfully deleted.
+
+        // [9] Reflect.getOwnPropertyDescriptor(target, prop): it returns a property descriptor of the given property if it exists on the object, undefined otherwise.
+
+        // [10] Reflect.apply(target.fun, thisArg, argsList): it calls a target function with arguments as specified.
+        //                                                Equivalent to: target.fun.apply(thisArg, argList);
+
+        // [11] Reflect.construct(cls, argsList): it is like the new operator, but as a function. It is equivalent to calling new cls(...args).
+
+
+        var obj = {
+            p1:1,
+            p2:"2",
+            [Symbol("s1")]: 1
+        }
+        var handler = 
+        {
+            has(target, prop)
+            {
+                if (prop[0] == prop[0].toUpperCase())
+                    return false;
+                else
+                    return Reflect.has(target, prop);
+            },
+            defineProperty(target, prop, attr)
+            {
+                if (prop[0] != prop[0].toUpperCase())
+                    return Reflect.defineProperty(target, prop, attr);
+                return true;
+            },
+            deleteProperty(target, prop)
+            {
+                if (prop == 'p1' || prop == 'p2')
+                    return false;
+                else
+                    return Reflect.deleteProperty(target, prop);
+            },
+            ownKeys(target)
+            {
+                console.log("handler.ownKeys Called")
+                return Reflect.ownKeys(target).reverse();
+            },
+            preventExtensions(target)
+            {
+                throw "You can't prevent This Object from Extension"
+            }
+        }
+        var pObj = new Proxy(obj, handler);
+        
+        // has test
+        console.log("B1" in pObj) // false
+        console.log("p1" in pObj) // true
+        console.log("p3" in pObj) // false
+
+        // defineProperty test
+        console.log(Object.defineProperty(pObj, "B4", { value: 4, configurable: true, writable: true, enumerable: true})) // not added
+        console.log(Object.defineProperty(pObj, "p4", { value: 4, configurable: true, writable: true, enumerable: true})) // added
+
+        // deleteProperty test
+        console.log((delete pObj.p1)) // false
+        console.log(pObj) // pObj.p1 not deleted
+        console.log((delete pObj.p4)) // true
+        console.log(pObj) // pObj.p4 deleted
+
+        //ownKeys test
+        console.log(Object.keys(pObj)); // reversed string fields ['p2', 'p1']
+        console.log(Reflect.ownKeys(pObj)); // reversed implementation of the default [Symbol('s1'), 'p2', 'p1']
+
+        // preventExtensions test
+        // console.log(Object.preventExtensions(pObj)) // error : "You can't prevent This Object from Extension"
+        // console.log(Reflect.preventExtensions(pObj)) // error : "You can't prevent This Object from Extension"
+    </script>
+</body>
+</html>

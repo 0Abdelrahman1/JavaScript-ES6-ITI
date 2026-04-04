@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var handler = {
+            set(target, prop, value)
+            {
+                switch (prop) {
+                    case 'name':
+                        if (typeof value != 'string' || !value.match(/^[A-Za-z]{7}$/))
+                            throw 'Name property must be string of 7 chars';
+                        break;
+                    case 'address':
+                        if (typeof value != 'string')
+                            throw 'Address property must be string';
+                        break;
+                    case 'age':
+                        if (25 > value || value > 60)
+                            throw 'Age property must be in range [25, 60]';
+                        break;
+                }
+                return Reflect.set(target, prop, value);
+            }
+        }
+        var obj = new Proxy({name: "1234567", address: "", age:45}, handler);
+
+        obj.name = "abcdefg"; // no error
+        console.log(obj.name)
+        try { obj.name = 2 } catch (e) { console.log("error: obj.name = 2\t\t\t=>\t" + e)} // error
+        try { obj.name = '1' } catch (e) { console.log("error: obj.name = '1'\t\t=>\t" + e)} // error
+        try { obj.name = '1234567' } catch (e) { console.log("error: obj.name = '1234567'\t\t=>\t" + e)} // error
+        
+        
+        obj.address = '123 add.' // no error
+        console.log(obj.address)
+        try { obj.address = 1 } catch (e) { console.log("error: obj.address = 1\t\t=>\t" + e)} // error
+        try { obj.address = {} } catch (e) { console.log("error: obj.address = {}\t\t=>\t" + e)} // error
+        
+        obj.age = 30; // no error
+        console.log(obj.age)
+        try { obj.age = 24 } catch (e) { console.log("error: obj.age = 24\t\t\t=>\t" + e)} // error
+        try { obj.age = 61 } catch (e) { console.log("error: obj.age = 61\t\t\t=>\t" + e)} // error
+        
+    </script>
+</body>
+</html>
