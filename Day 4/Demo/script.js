@@ -159,21 +159,21 @@
 // })
 
 // async function fun(){
-// var mypromise = new Promise(function(resolve,reject){
-//     var xhr = new XMLHttpRequest()
-//     xhr.open('GET','https://dummyjson.com/products')
-//     xhr.onreadystatechange = function(){
-//         if(xhr.readyState==4){
-//             if(xhr.status>=200&&xhr.status<300){
-//                 resolve(xhr.responseText)
-//             }
-//             else{
-//                 reject(xhr.status)
+//     var mypromise = new Promise(function(resolve,reject){
+//         var xhr = new XMLHttpRequest()
+//         xhr.open('GET','https://dummyjson.com/products')
+//         xhr.onreadystatechange = function(){
+//             if(xhr.readyState==4){
+//                 if(xhr.status>=200&&xhr.status<300){
+//                     resolve(xhr.responseText)
+//                 }
+//                 else{
+//                     reject(xhr.status)
+//                 }
 //             }
 //         }
-//     }
-//     xhr.send()
-// })
+//         xhr.send()
+//     })
 
 // var result = mypromise
 // .then(function(data){
@@ -266,3 +266,25 @@ console.log('test2')
 
 
 
+
+
+// how to use try-catch async await instead of .then .catch
+!async function f()
+{
+    mypromise = new Promise(function(resolve, reject)
+    {
+        var ok = 0, x = "x", y = "y";
+        if (ok)
+            resolve(x);
+        else
+            reject(y);
+    })
+    try{
+        var x = await mypromise;
+        console.log(x);
+    }
+    catch(y)
+    {
+        console.log(y);
+    }
+}()

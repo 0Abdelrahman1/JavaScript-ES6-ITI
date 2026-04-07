@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, th, td {
+            border: 5px solid black;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: larger;
+        }
+    </style>
+</head>
+<body>
+    <table id="table">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+        </tr>
+
+    </table>
+    <script>
+        (async function getData()
+        {
+            var table = document.getElementById('table');
+            const url = "https://dummyjson.com/products";
+            try
+            {
+                const response = await fetch(url);
+                if (!response.ok)
+                    throw new Error(`Response status: ${response.status}`);
+                
+                const result = await response.json();
+                for (var p of result.products)
+                    table.innerHTML += `<tr><td>${p.id}</td><td>${p.title}</td></tr>`
+            }
+            catch (error) 
+            {
+                console.log(error.message);
+            }
+        })()
+
+
+
+
+// !async function f()
+// {
+//     mypromise = new Promise(function(resolve, reject)
+//     {
+//         var ok = 0, x = "x", y = "y";
+//         if (ok)
+//             resolve(x);
+//         else
+//             reject(y);
+//     })
+//     try{
+//         var x = await mypromise;
+//         console.log(x);
+//     }
+//     catch(y)
+//     {
+//         console.log(y);
+//     }
+// }()
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
